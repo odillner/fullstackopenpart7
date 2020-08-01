@@ -1,55 +1,49 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import {useSelector, useDispatch} from 'react-redux'
 
-import Blog from './Blog'
+import Toggleble from './Togglable'
 
-import blogService from '../services/blogs'
+import {deleteBlog, likeBlog} from '../reducers/blogs'
 
+const Blog = (props) => {
+    const blog = props.blog
 
-const Blogs = (props) => {
-    const {user, setUser} = props.state
-    const {info, error} = props.display
+    return (
+        <div className="blog">
+            <p>title: {blog.title}</p>
+            <p>author: {blog.author} </p>
+            <Toggleble show="view" hide="hide">
+                <p>url: {blog.url} </p>
+                <p className="likes">likes: {blog.likes}
+                    <button id="like-button" onClick={() => props.like(blog)}>
+                    Like
+                    </button>
+                </p>
+                <p>owner id: {blog.user} </p>
+                <p>blog id: {blog.id} </p>
+                <button id="remove-button" onClick={() => props.remove(blog)}>
+                    Remove
+                </button>
+            </Toggleble>
+        </div>
+    )
+}
 
-    const blogs = user.blogs.sort((a,b) => b.likes - a.likes)
+const Blogs = () => {
+    const dispatch = useDispatch()
 
-    const likeBlog = async (blog) => {
-        const newBlog = {
-            title: blog.title,
-            author: blog.author,
-            url: blog.url,
-            user: blog.user,
-            likes: blog.likes + 1
-        }
+    const blogs = useSelector(state => state.blogs)
+        .sort((a,b) => b.likes - a.likes)
 
-        try {
-            await blogService.update(blog.id, newBlog, user.token)
+    const token = useSelector(state => state.session.token)
 
-            blog.likes++
-
-            user.blogs = blogs
-            setUser(user)
-
-            info('Blog successfully liked')
-        } catch (err) {
-            error('Error liking blog')
-        }
+    const like = async (blog) => {
+        dispatch(likeBlog(blog, token))
     }
 
-    const removeBlog = async (removedBlog) => {
-        if (!window.confirm(`Do you really want to delete ${removedBlog.title}?`)) {
-            return
-        }
-
-        try {
-            await blogService.remove(removedBlog.id, user.token)
-
-            user.blogs = user.blogs.filter(blog => blog.id != removedBlog.id)
-            setUser(user)
-
-            info('Blog successfully deleted')
-        } catch (err) {
-            console.log(err)
-            error('Error deleting blog')
+    const remove = async (blog) => {
+        if (window.confirm(`Do you really want to delete ${blog.title}?`)) {
+            dispatch(deleteBlog(blog, token))
         }
     }
 
@@ -58,7 +52,7 @@ const Blogs = (props) => {
             <div className="wrapper" id="blog-list">
                 {blogs.map(blog => {
                     return (
-                        <Blog blog={blog} like={likeBlog} remove={removeBlog} key={blog.id}/>
+                        <Blog blog={blog} like={like} remove={remove} key={blog.id}/>
                     )
                 })}
             </div>
@@ -68,11 +62,6 @@ const Blogs = (props) => {
     return (
         <div/>
     )
-}
-
-Blogs.propTypes = {
-    state: PropTypes.object.isRequired,
-    display: PropTypes.object.isRequired,
 }
 
 export default Blogs

@@ -1,30 +1,22 @@
 import React, {useState} from 'react'
-import PropTypes from 'prop-types'
+import {useDispatch} from 'react-redux'
 
-import logInService from '../services/login'
+import {logInUser} from '../reducers/session'
 
-const LogIn = (props) => {
+const LogIn = () => {
     const [nameInput, setNameInput] = useState('')
     const [passwordInput, setPasswordInput] = useState('')
 
-    const {info, error} = props.display
+    const dispatch = useDispatch()
 
     const logIn = async (event) => {
         event.preventDefault()
 
-        const newUser = {
-            username: nameInput,
-            password: passwordInput
-        }
+        const username = nameInput
+        const password = passwordInput
 
-        try {
-            const res = await logInService.auth(newUser)
+        dispatch(logInUser(username, password))
 
-            props.setSession(res.user.id, res.token)
-            info('Successfully logged in')
-        } catch (err) {
-            error('Failed to log in, password or username incorrect')
-        }
         setNameInput('')
         setPasswordInput('')
     }
@@ -64,11 +56,6 @@ const LogIn = (props) => {
             </form>
         </div>
     )
-}
-
-LogIn.propTypes = {
-    setSession: PropTypes.func.isRequired,
-    display: PropTypes.object.isRequired,
 }
 
 export default LogIn
