@@ -14,7 +14,7 @@ const Anecdote = ({anecdotes}) => {
             <div>
                 <p>content: {anecdote.content}</p>
                 <p>author: {anecdote.author}</p>
-                <p>likes: {anecdote.likes}</p>
+                <p>votes: {anecdote.votes}</p>
                 <p>info: {anecdote.info}</p>
             </div>
         )
