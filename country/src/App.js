@@ -20,21 +20,20 @@ const useCountry = (name) => {
 
   const baseUrl = 'https://restcountries.eu/rest/v2/name/'
 
-  const fetch = async () => {
-    const res = await axios.get(baseUrl+name)
-  }
-
   useEffect(() => {
     const getCountry = async () => {
-        const res = await fetch()
-    
-        return res
+        try {
+            const res = await axios.get(baseUrl+name)
+        
+            setCountry(res.data[0])
+        } catch (e) {
+            setCountry({})
+        }
     }
 
-    const res = getCountry()
-
-    console.log(res)
-    setCountry()
+    if (name) {
+        getCountry()
+    }
   }, [name])
 
   return country
@@ -45,20 +44,17 @@ const Country = ({ country }) => {
     return null
   }
 
-  if (!country.found) {
-    return (
-      <div>
-        not found...
-      </div>
-    )
+  if (!country.name) {
+      return (
+          <p>not found</p>
+      )
   }
-
   return (
     <div>
-      <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <h3>{country.name} </h3>
+      <div>capital {country.capital} </div>
+      <div>population {country.population}</div> 
+      <img src={country.flag} height='100' alt={`flag of ${country.name}`}/>  
     </div>
   )
 }
@@ -68,14 +64,14 @@ const App = () => {
   const [name, setName] = useState('')
   const country = useCountry(name)
 
-  const fetch = (e) => {
+  const submit = (e) => {
     e.preventDefault()
     setName(nameInput.value)
   }
 
   return (
     <div>
-      <form onSubmit={fetch}>
+      <form onSubmit={submit}>
         <input {...nameInput} />
         <button>find</button>
       </form>
