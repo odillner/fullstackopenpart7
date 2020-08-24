@@ -5,7 +5,7 @@ import Toggleble from './Togglable'
 
 import {deleteBlog, likeBlog} from '../reducers/blogs'
 
-const Blog = (props) => {
+export const Blog = (props) => {
     const blog = props.blog
 
     return (
@@ -29,11 +29,8 @@ const Blog = (props) => {
     )
 }
 
-const Blogs = () => {
+export const BlogList = ({blogs}) => {
     const dispatch = useDispatch()
-
-    const blogs = useSelector(state => state.blogs)
-        .sort((a,b) => b.likes - a.likes)
 
     const token = useSelector(state => state.session.token)
 
@@ -47,21 +44,22 @@ const Blogs = () => {
         }
     }
 
-    if (blogs[0]) {
-        return (
-            <div className="wrapper" id="blog-list">
-                {blogs.map(blog => {
-                    return (
-                        <Blog blog={blog} like={like} remove={remove} key={blog.id}/>
-                    )
-                })}
-            </div>
-        )
+    if (blogs) {
+        if (blogs[0]) {
+            return (
+                <div className="wrapper" id="blog-list">
+                    {blogs.map(blog => {
+                        return (
+                            <Blog blog={blog} like={like} remove={remove} key={blog.id}/>
+                        )
+                    })}
+                </div>
+            )
+        }
     }
-
     return (
         <div/>
     )
 }
 
-export default Blogs
+export default BlogList

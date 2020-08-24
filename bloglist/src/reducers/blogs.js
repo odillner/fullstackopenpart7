@@ -90,11 +90,15 @@ export const deleteBlog = (blog, token) => {
     }
 }
 
-export const initBlogs = (blogs) => {
-    return ({
-        type: 'INIT_BLOGS',
-        data: blogs
-    })
+export const initBlogs = () => {
+    return async dispatch => {
+        const res = await blogService.getAll()
+
+        dispatch({
+            type: 'INIT_BLOGS',
+            data: res
+        })
+    }
 }
 
 export default blogReducer

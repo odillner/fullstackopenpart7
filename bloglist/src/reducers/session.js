@@ -3,6 +3,7 @@ import userService from '../services/users'
 
 import {info, error} from './notification'
 import {initBlogs} from './blogs'
+import {initUsers} from './users'
 
 const sessionReducer = (state = null, action) => {
     switch (action.type) {
@@ -31,7 +32,8 @@ export const logInUser = (username, password) => {
                 data: res
             })
 
-            dispatch(initBlogs(res.user.blogs))
+            dispatch(initBlogs())
+            dispatch(initUsers())
 
             dispatch(info('Successfully logged in', 5))
         } catch (err) {
@@ -56,7 +58,8 @@ export const initSession = () => {
                 }
             })
 
-            dispatch(initBlogs(user.blogs))
+            dispatch(initBlogs())
+            dispatch(initUsers())
         }
     }
 }
