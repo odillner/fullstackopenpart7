@@ -1,6 +1,6 @@
 import React from 'react'
 
-import BlogList from './BlogList'
+import BlogList from './Blog'
 import Togglable from './Togglable'
 
 const Profile = ({user}) => {

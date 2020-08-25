@@ -6,8 +6,7 @@ import Notification from './components/Notification'
 import Header from './components/Header'
 import Navbar from './components/Navbar'
 
-import NewBlog from './components/NewBlog'
-
+import NewBlog from './pages/NewBlog'
 import LogIn from './pages/LogIn'
 import Users from './pages/Users'
 import Blogs from './pages/Blogs'
@@ -35,8 +34,17 @@ function App() {
                 <Route path="/users/:id">
                     {session ? <Users /> : <Redirect to="/login" />}
                 </Route>
-                <Route path="/blogs">
+                <Route path="/users/">
+                    {session ? <Users /> : <Redirect to="/login" />}
+                </Route>
+                <Route path="/blogs/:id">
                     {session ? <Blogs /> : <Redirect to="/login" />}
+                </Route>
+                <Route path="/blogs/">
+                    {session ? <Blogs /> : <Redirect to="/login" />}
+                </Route>
+                <Route path="/newblog/">
+                    {session ? <NewBlog /> : <Redirect to="/login" />}
                 </Route>
                 <Route path="/">
                     {session ? <Users /> : <Redirect to="/login" />}

@@ -90,6 +90,23 @@ export const deleteBlog = (blog, token) => {
     }
 }
 
+export const addComment = (blog, comment) => {
+    return async dispatch => {
+        try {
+            const res = await blogService.comment(blog.id, comment)
+
+            dispatch({
+                type: 'UPDATE_BLOG',
+                data: res
+            })
+
+            dispatch(info('Comment successfully added', 5))
+        } catch (err) {
+            dispatch(error('Error adding comment', 5))
+        }
+    }
+}
+
 export const initBlogs = () => {
     return async dispatch => {
         const res = await blogService.getAll()

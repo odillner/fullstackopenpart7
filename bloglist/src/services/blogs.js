@@ -88,5 +88,21 @@ export default {
             logger.error(extension, err)
             throw err
         }
+    },
+
+    comment: async (id, comment) => {
+        try {
+            logger.info(extension, 'Adding comment to blog', id, comment)
+
+
+            const res = await axios.post(`${baseUrl}${id}/comments`, {comment})
+
+            logger.info(extension, 'Comment added', res)
+
+            return res.data
+        } catch (err) {
+            logger.error(extension, err)
+            throw err
+        }
     }
 }

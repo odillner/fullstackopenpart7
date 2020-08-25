@@ -1,16 +1,19 @@
 import React, {useState, useRef} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
+import {useHistory} from 'react-router-dom'
 
 import {createBlog} from '../reducers/blogs'
 
 
-import Toggleble from './Togglable'
+import Toggleble from '../components/Togglable'
 
 const NewBlog = () => {
     const [titleInput, setTitleInput] = useState('')
     const [authorInput, setAuthorInput] = useState('')
     const [urlInput, setUrlInput] = useState('')
 
+
+    const history = useHistory()
     const dispatch = useDispatch()
 
     const session = useSelector(state => state.session)
@@ -28,6 +31,8 @@ const NewBlog = () => {
         }
 
         dispatch(createBlog(newBlog, session.token))
+        history.push('/blogs')
+
 
         setTitleInput('')
         setAuthorInput('')
